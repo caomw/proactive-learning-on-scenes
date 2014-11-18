@@ -106,6 +106,10 @@
 class GlobalAppState
 {	
 	public:
+    enum TEXTURE_ID
+    {
+      POINT_TEXTURE = 100
+    };
 
 #define X(type, name) type name;
 		X_GLOBAL_APP_STATE_FIELDS

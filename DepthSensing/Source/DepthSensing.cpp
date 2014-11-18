@@ -14,12 +14,12 @@ CDXUTDialog                 g_SampleUI;              // dialog for sample specif
 CDXUTTextHelper*            g_pTxtHelper = NULL;
 
 CModelViewerCamera          g_Camera;                // A model viewing camera
-DX11SceneRepHashSDF			g_SceneRepSDFLocal;
-DX11SceneRepHashSDF			g_SceneRepSDFGlobal;	// we had the idea once to use two hashes on the GPU, one inside, and one outside of the frustm; but not used atm
-DX11SceneRepChunkGrid		g_SceneRepChunkGrid;
-TrajectoryLogReader			g_TrajectoryLogReader;
-DX11Sensor					g_Sensor;
-bool						g_bRenderHelp = true;
+DX11SceneRepHashSDF			    g_SceneRepSDFLocal;
+DX11SceneRepHashSDF			    g_SceneRepSDFGlobal;	// we had the idea once to use two hashes on the GPU, one inside, and one outside of the frustm; but not used atm
+DX11SceneRepChunkGrid		    g_SceneRepChunkGrid;
+TrajectoryLogReader			    g_TrajectoryLogReader;
+DX11Sensor					        g_Sensor;
+bool						            g_bRenderHelp = true;
 
 
 
@@ -508,6 +508,16 @@ void CALLBACK OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserC
 				//break; 
 				StopScanningAndDumpVoxelHash();
 			}
+      break;
+    case 'A':
+      {
+        GlobalAppState::getInstance().s_DisplayTexture = GlobalAppState::POINT_TEXTURE;
+        MeshDataf mesh;
+        std::string myPly = "Scans\\box.ply";
+        MeshIO<float>::loadFromPLY(myPly, mesh);
+        std::cout<<mesh.m_Vertices.size() <<std::endl;
+        std::cout<<mesh.m_Normals.size() <<std::endl;
+      }
 		default:
 			break;
 		}
@@ -1120,6 +1130,9 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 		{
 			//DX11QuadDrawer::RenderQuad(pd3dImmediateContext, DX11RayCastingHashSDF::getColorsImageSRV());
 			DX11QuadDrawer::RenderQuad(pd3dImmediateContext, g_Sensor.GetColorSRV());
+		}else if (GlobalAppState::getInstance().s_DisplayTexture == GlobalAppState::POINT_TEXTURE)
+		{
+      std::cout<<"ready to draw points" <<std::endl;
 		}
 
 		if (GlobalAppState::getInstance().s_timingsTotalEnabled) {
@@ -1163,9 +1176,5 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 		RenderText();
 		DXUT_EndPerfEvent();
 	}
-
-
-
-
-
+  
 }

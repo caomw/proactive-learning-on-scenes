@@ -102,5 +102,5 @@ vec3i VoxelUtilHelper::getColorBySDF(float sdf_value, float sdf_min, float sdf_m
   float r = g_color_table[tmp][0];
   float g = g_color_table[tmp][1];
   float b = g_color_table[tmp][2];
-  return vec3i(r * 255, g * 255, b * 255);
+  return vec3i(int(r * 255), int(g * 255), int(b * 255));
 }
