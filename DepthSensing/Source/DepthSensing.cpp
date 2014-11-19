@@ -517,7 +517,9 @@ void CALLBACK OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserC
         MeshIO<float>::loadFromPLY(myPly, mesh);
         std::cout<<mesh.m_Vertices.size() <<std::endl;
         std::cout<<mesh.m_Normals.size() <<std::endl;
+        
       }
+      break;
 		default:
 			break;
 		}
@@ -1133,6 +1135,7 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 		}else if (GlobalAppState::getInstance().s_DisplayTexture == GlobalAppState::POINT_TEXTURE)
 		{
       std::cout<<"ready to draw points" <<std::endl;
+      //DX11QuadDrawer::RenderQuad(pd3dImmediateContext, )
 		}
 
 		if (GlobalAppState::getInstance().s_timingsTotalEnabled) {
