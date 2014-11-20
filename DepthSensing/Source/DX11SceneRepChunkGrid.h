@@ -639,6 +639,26 @@ class DX11SceneRepChunkGrid
       float sdf_min = +1000.f;
       int point_num = 0;
 
+      std::ofstream m_grid_out;
+      m_grid_out.open("./DataDump/m_grid.ply");
+      //save m_grid
+      m_grid_out << "ply\n";
+      m_grid_out << "format ascii 1.0\n";
+      m_grid_out << "comment MLIB generated\n";
+      m_grid_out << "element vertex " << 256*256*256 << "\n";
+      m_grid_out << "property float x\n";
+      m_grid_out << "property float y\n";
+      m_grid_out << "property float z\n";
+
+      m_grid_out << "property uchar red\n";
+      m_grid_out << "property uchar green\n";
+      m_grid_out << "property uchar blue\n";
+
+      m_grid_out << "element face " << 0 << "\n";
+      m_grid_out << "property list uchar int vertex_indices\n";
+      m_grid_out << "end_header\n";
+
+      //save sdf
       std::ofstream sdf_out;
       sdf_out.open("./DataDump/sdf.ply");
       //write header
@@ -658,12 +678,18 @@ class DX11SceneRepChunkGrid
       sdf_out << "property list uchar int vertex_indices\n";
       sdf_out << "end_header\n";
 
+      int chunkNum = 0;
       //遍历每个grid，一共有257 * 257 *257个grid， grid是由chunk组成
 			for (int x = minGridPos.x; x < maxGridPos.x; x+=1)	{
 				for (int y = minGridPos.y; y < maxGridPos.y; y+=1) {
 					for (int z = minGridPos.z; z< maxGridPos.z; z+=1)	{
             //这是每个chunk的索引坐标
 						vec3i chunk(x, y, z);
+            chunkNum++;
+
+            int chunkSDFNum = 0;
+            float chunkSDFSum = 0.0f;
+
             //这个函数里面其实有调用linearizeChunkPos
 						if (containsSDFBlocksChunk(chunk))	{
 							std::cout << "Dump Hash on chunk (" << x << ", " << y << ", " << z << ") " << std::endl;
@@ -675,12 +701,12 @@ class DX11SceneRepChunkGrid
 							vec3f minCorner = chunkCenter - voxelExtends / 2.0f - vec3f(virtualVoxelSize, virtualVoxelSize, virtualVoxelSize) * SDF_BLOCK_SIZE;
 							vec3f maxCorner = chunkCenter + voxelExtends / 2.0f + vec3f(virtualVoxelSize, virtualVoxelSize, virtualVoxelSize) * SDF_BLOCK_SIZE;
 
-              //确认该chunk里面有sdfblock
+              //确认该chunk里面有sdfblock，与上面一个if重复
 							unsigned int index = linearizeChunkPos(vec3i(x, y, z));
 							if(m_grid[index] != NULL && m_grid[index]->isStreamedOut()) // As been allocated and has streamed out blocks
 							{
 								ChunkDesc* chunkDesc = m_grid[index];
-                //遍历该chunk中的每个sdfBlock
+                //遍历该chunk中包含的sdfBlock
 								for (size_t i = 0; i < chunkDesc->m_ChunkDesc.size(); i++) {
                   //由于对ptr的判断已经被注释掉了，所以这两句其实没用，sdfDesc还有一个pos信息有可能有用，但是这个pos是SDFBlock的pos,而不是每个
                   //小的voxel的pos
@@ -698,6 +724,8 @@ class DX11SceneRepChunkGrid
 
                       sdf_max = std::max(sdf, sdf_max);
                       sdf_min = std::min(sdf, sdf_min);
+                      chunkSDFNum++;
+                      chunkSDFSum += sdf;
 
 											int last = chunkDesc->m_SDFBlocks[i].data[2*j+1];
 											vBlock.voxels[j].weight = last & 0x000000ff;
@@ -709,8 +737,9 @@ class DX11SceneRepChunkGrid
 											vBlock.voxels[j].color.z = last & 0x000000ff;
 
                       //wei add
+                      //大的sdfBlock的位置 + 每个小voxel的偏移位置
                       vec3f voxelWordPos = VoxelUtilHelper::SDFBlockToWorld(sdfDesc.pos)+ VoxelUtilHelper::virtualVoxelPosToWorld(VoxelUtilHelper::delinearlize(j));
-                      vec3i voxelColor = VoxelUtilHelper::getColorBySDF(vBlock.voxels[j].sdf, -0.05, 0.049);
+                      vec3i voxelColor = VoxelUtilHelper::getColorBySDF(vBlock.voxels[j].sdf, VoxelUtilHelper::g_min_sdf, VoxelUtilHelper::g_max_sdf);
 
                       ++point_num;
                       sdf_out <<voxelWordPos.x <<" " <<voxelWordPos.y <<" " <<voxelWordPos.z 
@@ -743,22 +772,38 @@ class DX11SceneRepChunkGrid
 							//V_RETURN(DX11MarchingCubesHashSDF::extractIsoSurface(context, hash.GetHashSRV(), hash.GetSDFBlocksSDFSRV(), hash.GetSDFBlocksRGBWSRV(), hash.MapAndGetConstantBuffer(context), hash.GetHashNumBuckets(), hash.GetHashBucketSize(), minCorner, maxCorner, true));
 							//V_RETURN(chunkGrid.StreamOutToCPUAll(context, hash));
 						}
-					}
+            //存出Grid到立方体中来
+            float chunkSDFAverage;
+            if (chunkSDFNum == 0)
+            {
+              chunkSDFAverage = 100;
+            }else
+            {
+              chunkSDFAverage = chunkSDFSum * 1.0f / chunkSDFNum;
+            }
+
+            vec3i chunkColor = VoxelUtilHelper::getColorBySDF(chunkSDFAverage, VoxelUtilHelper::g_min_sdf, VoxelUtilHelper::g_max_sdf);
+            m_grid_out<<x <<" "  <<y << " " <<z <<" "
+              <<chunkColor.x <<" " << chunkColor.y <<" " <<chunkColor.z
+              <<std::endl;
+          }
 				}
 			}
       std::cout<<sdf_max <<" " <<sdf_min <<std::endl;
-      std::cout<<point_num <<std::endl;
+      std::cout<<"sdf point num: " <<point_num <<std::endl;
+      std::cout<<"chunk point num: " <<chunkNum <<std::endl;
       sdf_out.close();
+      m_grid_out.close();
 
       std::cout << "found " << occupiedBlocks << " voxel blocks   ";
-			//grid.writeBinaryDump(filename);//wei used to save file
-      grid.writeDumpAscii("./DataDump/grid_out.ply");
+			grid.writeBinaryDump(filename);
 
 			unsigned int nStreamedBlock;
 			V_RETURN(StreamInToGPUAll(context, hash, camPos, radius, true, nStreamedBlock));
 
 			return hr;
 		}
+
 	private:
 
 		//-------------------------------------------------------

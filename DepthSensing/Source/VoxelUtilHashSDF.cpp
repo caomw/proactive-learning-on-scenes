@@ -98,6 +98,10 @@ vec3i VoxelUtilHelper::delinearlize(unsigned int idx)
 
 vec3i VoxelUtilHelper::getColorBySDF(float sdf_value, float sdf_min, float sdf_max)
 {
+  if(abs(sdf_value - 100) < 1e-4){
+    return vec3i(0, 0, 0);//如果是默认的sdf值，即里面没有sdf voxel的话，返回黑色
+  }
+
   int tmp = static_cast<int>((sdf_value - sdf_min) / (sdf_max - sdf_min) * 255);
   float r = g_color_table[tmp][0];
   float g = g_color_table[tmp][1];

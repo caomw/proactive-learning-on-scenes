@@ -487,6 +487,7 @@ void CALLBACK OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserC
 		case '9':
 			{
 				StopScanningAndExtractIsoSurfaceMC();
+        std::cout<<"wei save mesh done!" <<std::endl;
 				break;
 			}
 		case 'G':

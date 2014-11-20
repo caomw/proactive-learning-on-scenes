@@ -44,11 +44,16 @@ class SDFDesc
 class ChunkDesc
 {
 	public:
-	
+    enum 
+    {
+      SDF_DEFAULT = 100
+    };
+
 		ChunkDesc(unsigned int initialChunkListSize)
 		{
 			m_SDFBlocks = std::vector<SDFBlock>(); m_SDFBlocks.reserve(initialChunkListSize);
 			m_ChunkDesc = std::vector<SDFDesc>(); m_ChunkDesc.reserve(initialChunkListSize);
+      m_AverageSDF = SDF_DEFAULT;
 		}
 
 		void addSDFBlock(const SDFDesc& desc, const SDFBlock& data)
@@ -97,6 +102,7 @@ class ChunkDesc
 
 		std::vector<SDFBlock> m_SDFBlocks;
 		std::vector<SDFDesc> m_ChunkDesc;
+    float m_AverageSDF;
 };
 
 struct Voxel
@@ -131,6 +137,9 @@ namespace VoxelUtilHelper
   vec3i delinearlize(unsigned int idx);
 
   vec3i getColorBySDF(float sdf_value, float sdf_min, float sdf_max);
+
+  static const float g_max_sdf = 0.05;
+  static const float g_min_sdf = -0.05;
 
   static const float g_color_table[256][3] = {
     0, 0, 0.5156

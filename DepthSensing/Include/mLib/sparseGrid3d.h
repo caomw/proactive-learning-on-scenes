@@ -102,11 +102,11 @@ public:
 
   //T must be VoxelBlock
   void writeDumpAscii(const std::string &s) const {
-    std::ofstream fout(s);
+    /*std::ofstream fout(s);
     fout << "ply\n";
     fout << "format ascii 1.0\n";
     fout << "comment MLIB generated\n";
-    fout << "element vertex " << m_Data.size() << "\n";
+    fout << "element vertex " << 0 << "\n";
     fout << "property float x\n";
     fout << "property float y\n";
     fout << "property float z\n";
@@ -122,10 +122,12 @@ public:
     for(auto iter = begin(); iter != end(); ++iter){
       const ml::vec3i first = iter->first;
       const T second = iter->second;
+      vec3i grid_color = VoxelUtilHelper::getColorBySDF(second.m_ave)
+
       fout<<first.x <<" " <<first.y <<" " <<first.z <<" "
         <<second.voxels[0].sdf <<" " <<second.voxels[0].sdf <<" " <<second.voxels[0].sdf <<std::endl;
     }
-    fout.close();
+    fout.close();*/
   }
 
 	void readBinaryDump(const std::string& s) {
