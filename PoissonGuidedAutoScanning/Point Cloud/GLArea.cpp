@@ -1932,19 +1932,20 @@ void GLArea::wheelEvent(QWheelEvent *e)
 
   if (global_paraMgr.glarea.getBool("Show SDF Slices"))
   {
+    
+    double sdf_voxel_size = global_paraMgr.nbv.getDouble("SDF Voxel Size");
+
     switch(e->modifiers())
     {
     case Qt::ControlModifier:
-      {
+      {        
         double x_pos = global_paraMgr.poisson.getDouble("Current X Slice Position");
-        double tmp = global_paraMgr.nbv.getDouble("SDF Voxel Size");
         if(e->delta() < 0){
-          x_pos -= tmp;
+          x_pos -= sdf_voxel_size;
         }else{
-          x_pos += tmp;
+          x_pos += sdf_voxel_size;
         }
-        
-        
+
         global_paraMgr.poisson.setValue("Current X Slice Position", DoubleValue(x_pos)); 
         cout << "X position: " << x_pos << endl;
 
@@ -1957,12 +1958,40 @@ void GLArea::wheelEvent(QWheelEvent *e)
       break;
     case Qt::AltModifier:
       {
+        double y_pos = global_paraMgr.poisson.getDouble("Current Y Slice Position");
+        if(e->delta() < 0){
+          y_pos -= sdf_voxel_size;
+        }else{
+          y_pos += sdf_voxel_size;
+        }
 
+        global_paraMgr.poisson.setValue("Current Y Slice Position", DoubleValue(y_pos)); 
+        cout << "Y position: " << y_pos << endl;
+
+        global_paraMgr.nbv.setValue("Run SDF Slice", BoolValue(true));
+        runNBV();
+        global_paraMgr.nbv.setValue("Run SDF Slice", BoolValue(true));
+
+        emit needUpdateStatus();
       }
       break;
     case Qt::ShiftModifier:
       {
+        double z_pos = global_paraMgr.poisson.getDouble("Current Z Slice Position");
+        if(e->delta() < 0){
+          z_pos -= sdf_voxel_size;
+        }else{
+          z_pos += sdf_voxel_size;
+        }
 
+        global_paraMgr.poisson.setValue("Current Y Slice Position", DoubleValue(z_pos)); 
+        cout << "Z position: " << z_pos << endl;
+
+        global_paraMgr.nbv.setValue("Run SDF Slice", BoolValue(true));
+        runNBV();
+        global_paraMgr.nbv.setValue("Run SDF Slice", BoolValue(true));
+
+        emit needUpdateStatus();
       }
       break;
     default:
