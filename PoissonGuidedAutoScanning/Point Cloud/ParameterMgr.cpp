@@ -213,9 +213,9 @@ void ParameterMgr::initPoissonParameter()
 	poisson.addParam(new RichBool("Show Y Slices", false));
 	poisson.addParam(new RichBool("Show Z Slices", false));
 	poisson.addParam(new RichBool("Show Transparent Slices", false));
-	poisson.addParam(new RichDouble("Current X Slice Position", 0.5));
-	poisson.addParam(new RichDouble("Current Y Slice Position", 0.5));
-	poisson.addParam(new RichDouble("Current Z Slice Position", 0.5));
+	poisson.addParam(new RichDouble("Current X Slice Position", 0.0f));
+	poisson.addParam(new RichDouble("Current Y Slice Position", 0.0f));
+	poisson.addParam(new RichDouble("Current Z Slice Position", 0.0f));
 	poisson.addParam(new RichDouble("Show Slice Percentage", 0.75));
 	poisson.addParam(new RichDouble("Poisson Disk Sample Number", 3000));
   poisson.addParam(new RichDouble("Original KNN", 251));
@@ -269,11 +269,6 @@ void ParameterMgr::initCameraParameter()
   camera.addParam(new RichDouble("Camera Resolution",1.0f / 50.0f));
   camera.addParam(new RichDouble("Merge Confidence Threshold", 0.9f));
   camera.addParam(new RichDouble("Grid Step Size", -1));
-
-  //sdf related
-  camera.addParam(new RichBool("Show SDF Slice X", false));
-  camera.addParam(new RichBool("Show SDF Slice Y", false));
-  camera.addParam(new RichBool("Show SDF Slice Z", false));
 }
 
 void ParameterMgr::initNBVParameter()
@@ -313,4 +308,11 @@ void ParameterMgr::initNBVParameter()
   nbv.addParam(new RichBool("Need Update Direction With More Overlaps", true));
   nbv.addParam(new RichDouble("Max Displacement", 0.05));
   nbv.addParam(new RichBool("NBV Lock PaintGL", false));
+
+  //sdf related
+  nbv.addParam(new RichBool("Show SDF Slice X", false));
+  nbv.addParam(new RichBool("Show SDF Slice Y", false));
+  nbv.addParam(new RichBool("Show SDF Slice Z", false));
+  nbv.addParam(new RichBool("Run SDF Slice", false));
+  nbv.addParam(new RichDouble("SDF Voxel Size", 0.004));
 }

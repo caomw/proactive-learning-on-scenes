@@ -42,6 +42,8 @@ private:
   double& optimal_D, double& half_D2, double& sigma_threshold);
   int    getIsoPointsViewBinIndex(Point3f& p, int which_axis);
   static bool cmp(const CVertex &v1, const CVertex &v2);
+  //sdf related
+  void runSDFSlice();
 
 private:
   int                   view_bin_each_axis;
@@ -63,4 +65,7 @@ private:
   vector<float>         confidence_weight_sum;
   vector<double>        nbv_scores;
   Box3f*                whole_space_box;
+  //sdf related
+  CMesh                 *sdf_voxels;
+  Slices                *sdf_slices;
 };

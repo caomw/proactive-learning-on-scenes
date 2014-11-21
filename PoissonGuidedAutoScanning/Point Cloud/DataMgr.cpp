@@ -753,9 +753,16 @@ Box3f DataMgr::normalizeAllMesh()
       box.Add(original.vert[i].P());
   }
 
+  if (!isSDFVoxelsEmpty())
+  {
+    for (size_t i = 0; i < sdf_voxels.vert.size(); ++i)
+      box.Add(sdf_voxels.vert[i].P());
+  }
+
   model.bbox = box;
   original.bbox =box;
   samples.bbox = box;
+  sdf_voxels.bbox = box;
 
   float max_x = abs((box.min - box.max).X());
   float max_y = abs((box.min - box.max).Y());
@@ -763,10 +770,14 @@ Box3f DataMgr::normalizeAllMesh()
   float max_length = std::max(max_x, std::max(max_y, max_z));
   global_paraMgr.data.setValue("Max Normalize Length", DoubleValue(max_length));
 
+  double old = global_paraMgr.nbv.getDouble("SDF Voxel Size");
+  global_paraMgr.nbv.setValue("SDF Voxel Size", DoubleValue(old / max_length));
+
   normalizeROSA_Mesh(model);
   normalizeROSA_Mesh(original, true);
   normalizeROSA_Mesh(samples);
   normalizeROSA_Mesh(iso_points);
+  normalizeROSA_Mesh(sdf_voxels);
 
   recomputeBox();
   getInitRadiuse();

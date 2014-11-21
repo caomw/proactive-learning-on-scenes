@@ -64,6 +64,7 @@ void vcc::Camera::run()
     runOneKeyNewScan();
     return;
   }
+  
 }
 
 void vcc::Camera::runVirtualScan()

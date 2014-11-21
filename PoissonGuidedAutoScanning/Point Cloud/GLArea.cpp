@@ -445,15 +445,15 @@ void GLArea::paintGL()
 
     if (para->getBool("Show SDF Slices"))
     {
-      if (global_paraMgr.camera.getBool("Show SDF Slice X"))
+      if (global_paraMgr.nbv.getBool("Show SDF Slice X"))
       {
         glDrawer.drawSDFSlice((*dataMgr.getCurrentSDFSlices())[0], 1);
       }
-      if (global_paraMgr.camera.getBool("Show SDF Slice Y"))
+      if (global_paraMgr.nbv.getBool("Show SDF Slice Y"))
       {
         glDrawer.drawSDFSlice((*dataMgr.getCurrentSDFSlices())[1], 1);
       }
-      if (global_paraMgr.camera.getBool("Show SDF Slice Z"))
+      if (global_paraMgr.nbv.getBool("Show SDF Slice Z"))
       {
         glDrawer.drawSDFSlice((*dataMgr.getCurrentSDFSlices())[2], 1);
       }
@@ -1429,7 +1429,7 @@ void GLArea::runCamera()
 
 void GLArea::runNBV()
 {
-  if (dataMgr.isIsoPointsEmpty()) return;
+  if (dataMgr.isIsoPointsEmpty() && dataMgr.isSDFVoxelsEmpty()) return;
 
   runPointCloudAlgorithm(nbv);
 
@@ -1759,7 +1759,8 @@ void GLArea::wheelEvent(QWheelEvent *e)
     && (e->modifiers() & Qt::ControlModifier)
     && (e->modifiers() & Qt::AltModifier)
     && (e->modifiers() & Qt::ShiftModifier)
-    && !global_paraMgr.poisson.getBool("Show Slices Mode"))
+    && !global_paraMgr.poisson.getBool("Show Slices Mode")
+    && !global_paraMgr.nbv.getBool("Show SDF Slices"))
   {
     size_temp = global_paraMgr.nbv.getDouble("Confidence Separation Value");
     size_temp *= change2;
@@ -1776,6 +1777,7 @@ void GLArea::wheelEvent(QWheelEvent *e)
 
   if (global_paraMgr.poisson.getBool("Show Slices Mode"))
   {
+    //三个一起按，修改slice的大小
     if ((e->modifiers() & Qt::ShiftModifier)
       && (e->modifiers() & Qt::ControlModifier)
       && (e->modifiers() & Qt::AltModifier))
@@ -1790,7 +1792,7 @@ void GLArea::wheelEvent(QWheelEvent *e)
       global_paraMgr.poisson.setValue("Run Slice", BoolValue(true));
       runPoisson();
       global_paraMgr.poisson.setValue("Run Slice", BoolValue(false));
-    }
+    }//两个一起按，分别修改两种颜色
     else if( (e->modifiers() & Qt::ShiftModifier) && (e->modifiers() & Qt::ControlModifier) )
     {
       if (para->getBool("Show View Grid Slice"))
@@ -1860,54 +1862,62 @@ void GLArea::wheelEvent(QWheelEvent *e)
 
     }
     else
-    {
+    {//单独按的话，修改对应轴的slice的位置
       switch(e->modifiers())
       {
       case Qt::ControlModifier:
-        size_temp = global_paraMgr.poisson.getDouble("Current X Slice Position");
-        size_temp *= change2;
-        size_temp = (std::max)(size_temp, 1e-5);
-        size_temp = (std::min)(size_temp, 0.999);
+        {
+          size_temp = global_paraMgr.poisson.getDouble("Current X Slice Position");
+          size_temp *= change2;
+          size_temp = (std::max)(size_temp, 1e-5);
+          size_temp = (std::min)(size_temp, 0.999);
 
-        global_paraMgr.poisson.setValue("Current X Slice Position", DoubleValue(size_temp)); 
-        cout << "X position: " << size_temp << endl;
-        emit needUpdateStatus();
-        global_paraMgr.poisson.setValue("Run Slice", BoolValue(true));
-        runPoisson();
-        global_paraMgr.poisson.setValue("Run Slice", BoolValue(false));
+          global_paraMgr.poisson.setValue("Current X Slice Position", DoubleValue(size_temp)); 
+          cout << "X position: " << size_temp << endl;
+
+          global_paraMgr.poisson.setValue("Run Slice", BoolValue(true));
+          runPoisson();
+          global_paraMgr.poisson.setValue("Run Slice", BoolValue(false));
+
+          emit needUpdateStatus();
+        }
         break;
-
       case Qt::ShiftModifier:
-        size_temp = global_paraMgr.poisson.getDouble("Current Y Slice Position");
-        size_temp *= change2;
-        size_temp = (std::max)(size_temp, 1e-10);
-        size_temp = (std::min)(size_temp, 1.0);
-        global_paraMgr.poisson.setValue("Current Y Slice Position", DoubleValue(size_temp)); 
-        cout << "Y position: " << size_temp << endl;
+        {
+          size_temp = global_paraMgr.poisson.getDouble("Current Y Slice Position");
+          size_temp *= change2;
+          size_temp = (std::max)(size_temp, 1e-10);
+          size_temp = (std::min)(size_temp, 1.0);
+          global_paraMgr.poisson.setValue("Current Y Slice Position", DoubleValue(size_temp)); 
+          cout << "Y position: " << size_temp << endl;
 
-        global_paraMgr.poisson.setValue("Run Slice", BoolValue(true));
-        runPoisson();
-        global_paraMgr.poisson.setValue("Run Slice", BoolValue(false));
-        emit needUpdateStatus();
+          global_paraMgr.poisson.setValue("Run Slice", BoolValue(true));
+          runPoisson();
+          global_paraMgr.poisson.setValue("Run Slice", BoolValue(false));
+
+          emit needUpdateStatus();
+        }
         break;
-
       case  Qt::AltModifier:
-        size_temp = global_paraMgr.poisson.getDouble("Current Z Slice Position");
-        size_temp *= change2;
-        size_temp = (std::max)(size_temp, 1e-5);
-        size_temp = (std::min)(size_temp, 0.999);
-        global_paraMgr.poisson.setValue("Current Z Slice Position", DoubleValue(size_temp));      
-        cout << "Z position: " << size_temp << endl;
+        {
+          size_temp = global_paraMgr.poisson.getDouble("Current Z Slice Position");
+          size_temp *= change2;
+          size_temp = (std::max)(size_temp, 1e-5);
+          size_temp = (std::min)(size_temp, 0.999);
+          global_paraMgr.poisson.setValue("Current Z Slice Position", DoubleValue(size_temp));      
+          cout << "Z position: " << size_temp << endl;
 
-        global_paraMgr.poisson.setValue("Run Slice", BoolValue(true));
-        runPoisson();
-        global_paraMgr.poisson.setValue("Run Slice", BoolValue(false));
+          global_paraMgr.poisson.setValue("Run Slice", BoolValue(true));
+          runPoisson();
+          global_paraMgr.poisson.setValue("Run Slice", BoolValue(false));
 
-        emit needUpdateStatus();
+          emit needUpdateStatus();
+        }
         break;
-
       default:
-        trackball.MouseWheel( e->delta()/ float(WHEEL_STEP));
+        {
+          trackball.MouseWheel( e->delta()/ float(WHEEL_STEP));
+        }
         break;
       }
 
@@ -1916,6 +1926,50 @@ void GLArea::wheelEvent(QWheelEvent *e)
       //global_paraMgr.poisson.setValue("Run Slice", BoolValue(false));
 
       return;
+    }
+    return;
+  }
+
+  if (global_paraMgr.glarea.getBool("Show SDF Slices"))
+  {
+    switch(e->modifiers())
+    {
+    case Qt::ControlModifier:
+      {
+        double x_pos = global_paraMgr.poisson.getDouble("Current X Slice Position");
+        double tmp = global_paraMgr.nbv.getDouble("SDF Voxel Size");
+        if(e->delta() < 0){
+          x_pos -= tmp;
+        }else{
+          x_pos += tmp;
+        }
+        
+        
+        global_paraMgr.poisson.setValue("Current X Slice Position", DoubleValue(x_pos)); 
+        cout << "X position: " << x_pos << endl;
+
+        global_paraMgr.nbv.setValue("Run SDF Slice", BoolValue(true));
+        runNBV();
+        global_paraMgr.nbv.setValue("Run SDF Slice", BoolValue(true));
+
+        emit needUpdateStatus();
+      }
+      break;
+    case Qt::AltModifier:
+      {
+
+      }
+      break;
+    case Qt::ShiftModifier:
+      {
+
+      }
+      break;
+    default:
+      {
+        trackball.MouseWheel( e->delta()/ float(WHEEL_STEP));
+      }
+      break;
     }
     return;
   }

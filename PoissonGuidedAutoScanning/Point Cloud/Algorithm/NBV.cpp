@@ -85,6 +85,12 @@ void NBV::run()
   {
     runComputeViewCandidateIndex();
   }
+
+  if(para->getBool("Run SDF Slice"))
+  {
+    runSDFSlice();
+    return;
+  }
 }
 
 bool NBV::cmp(const CVertex &v1, const CVertex &v2)
@@ -172,6 +178,9 @@ void NBV::setInput(DataMgr *pData)
     //model = _model;
     original = _original;
     field_points = pData->getCurrentFieldPoints();
+  }else if (!pData->getSDFVoxels()->vert.empty())
+  {
+    cout<<"Using SDF Voxels!" <<endl;
   }else
   {
     cout<<"ERROR: NBV::setInput empty!"<<endl;
@@ -186,6 +195,9 @@ void NBV::setInput(DataMgr *pData)
   scan_candidates = pData->getScanCandidates();
   seletedViewCameras = pData->getSelectedScanCandidates();
   whole_space_box = &pData->whole_space_box;
+  //sdf related
+  sdf_slices = pData->getCurrentSDFSlices();
+  sdf_voxels = pData->getSDFVoxels();
 }
 
 void NBV::clear()
@@ -1429,5 +1441,45 @@ void NBV::runComputeViewCandidateIndex()
       + t_indexZ * view_bin_each_axis + t_indexX;
 
     cout << i <<"th selected view candidate index: " <<index + 1<<endl;
+  }
+}
+
+
+
+void NBV::runSDFSlice()
+{
+  if(sdf_voxels == NULL || sdf_voxels->vert.size() == 0 || sdf_slices == NULL){
+    return ;
+  }
+
+  cout<<"sdf voxel point num: " <<sdf_voxels->vert.size() <<endl;
+  double hgl = 0.004 / global_paraMgr.data.getDouble("Max Normalize Length");
+
+  cout<<"half grid length: " <<hgl <<endl;
+  if (global_paraMgr.nbv.getBool("Show SDF Slice X"))
+  {
+    double x_pos = global_paraMgr.poisson.getDouble("Current X Slice Position");
+    cout<<x_pos<<endl;
+    (*sdf_slices)[0].slice_nodes.clear();
+    GlobalFun::computePointsOnPlane(sdf_voxels, hgl, 'X', x_pos, (*sdf_slices)[0].slice_nodes);
+    cout<<"sdf x slice node num: " <<(*sdf_slices)[0].slice_nodes.size() <<endl;
+  }
+
+  if(global_paraMgr.nbv.getBool("Show SDF Slice Y"))
+  {
+    float y_pos = global_paraMgr.poisson.getDouble("Current Y Slice Position");
+    cout<<y_pos<<endl;
+    (*sdf_slices)[1].slice_nodes.clear();
+    GlobalFun::computePointsOnPlane(sdf_voxels, hgl, 'Y', y_pos, (*sdf_slices)[1].slice_nodes);
+    cout<<"sdf y slice node num: " <<(*sdf_slices)[1].slice_nodes.size() <<endl;
+  }
+
+  if(global_paraMgr.nbv.getBool("Show SDF Slice Z"))
+  {
+    float z_pos = global_paraMgr.poisson.getDouble("Current Z Slice Position");
+    cout<<z_pos<<endl;
+    (*sdf_slices)[2].slice_nodes.clear();
+    GlobalFun::computePointsOnPlane(sdf_voxels, hgl, 'Z', z_pos, (*sdf_slices)[2].slice_nodes);
+    cout<<"sdf z slice node num: " <<(*sdf_slices)[2].slice_nodes.size() <<endl;
   }
 }

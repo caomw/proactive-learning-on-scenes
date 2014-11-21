@@ -83,7 +83,7 @@ namespace GlobalFun
   //x     yz
   //y     xz
   //z     xy
-  void computePointsOnPlane(const CMesh * const target, char axis, float axis_pos, vector<CVertex> &result);
+  void computePointsOnPlane(const CMesh * const target, double half_grid_lenght, char axis, double axis_pos, vector<CVertex> &result);
   Point3f scalar2color(double scalar);
   void normalizeConfidence(vector<CVertex>& vertexes, float delta);
 

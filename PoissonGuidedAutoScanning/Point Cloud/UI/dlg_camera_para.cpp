@@ -110,11 +110,11 @@ bool CameraParaDlg::initWidgets()
   ui->use_max_propagation->setCheckState(state);
 
   //sdf related
-  state = m_paras->camera.getBool("Show SDF Slice X") ? (Qt::CheckState::Checked) : (Qt::CheckState::Unchecked);
+  state = m_paras->nbv.getBool("Show SDF Slice X") ? (Qt::CheckState::Checked) : (Qt::CheckState::Unchecked);
   ui->checkBox_show_sdf_slice_X->setCheckState(state);
-  state = m_paras->camera.getBool("Show SDF Slice Y") ? (Qt::CheckState::Checked) : (Qt::CheckState::Unchecked);
+  state = m_paras->nbv.getBool("Show SDF Slice Y") ? (Qt::CheckState::Checked) : (Qt::CheckState::Unchecked);
   ui->checkBox_show_sdf_slice_Y->setCheckState(state);
-  state = m_paras->camera.getBool("Show SDF Slice Z") ? (Qt::CheckState::Checked) : (Qt::CheckState::Unchecked);
+  state = m_paras->nbv.getBool("Show SDF Slice Z") ? (Qt::CheckState::Checked) : (Qt::CheckState::Unchecked);
   ui->checkBox_show_sdf_slice_Z->setCheckState(state);
 
   updateTableViewNBVCandidate();
@@ -376,19 +376,19 @@ void CameraParaDlg::showCameraBorder(bool is_show)
 
 void CameraParaDlg::showSDFSliceX(bool _val)
 {
-  global_paraMgr.camera.setValue("Show SDF Slice X", BoolValue(_val));
+  global_paraMgr.nbv.setValue("Show SDF Slice X", BoolValue(_val));
   area->updateGL();
 }
 
 void CameraParaDlg::showSDFSliceY(bool _val)
 {
-  global_paraMgr.camera.setValue("Show SDF Slice Y", BoolValue(_val));
+  global_paraMgr.nbv.setValue("Show SDF Slice Y", BoolValue(_val));
   area->updateGL();
 }
 
 void CameraParaDlg::showSDFSliceZ(bool _val)
 {
-  global_paraMgr.camera.setValue("Show SDF Slice Z", BoolValue(_val));
+  global_paraMgr.nbv.setValue("Show SDF Slice Z", BoolValue(_val));
   area->updateGL();
 }
 
@@ -1172,31 +1172,7 @@ void CameraParaDlg::loadSDFVoxels()
 
 void CameraParaDlg::runSDFSlice()
 {
-  CMesh *sdf_mesh = area->dataMgr.getSDFVoxels();
-  Slices *sdf_slices = area->dataMgr.getCurrentSDFSlices();
-  if(sdf_mesh == NULL || sdf_mesh->vert.size() == 0 || sdf_slices == NULL){
-    return ;
-  }
-  
-  cout<<"sdf voxel point num: " <<sdf_mesh->vert.size() <<endl;
-  if (m_paras->camera.getBool("Show SDF Slice X"))
-  {
-    float x_pos = (sdf_mesh->bbox.min.X() + sdf_mesh->bbox.max.X() ) / 2.0f;
-    GlobalFun::computePointsOnPlane(sdf_mesh, 'X', x_pos, (*sdf_slices)[0].slice_nodes);
-    cout<<"sdf x slice node num: " <<(*area->dataMgr.getCurrentSDFSlices())[0].slice_nodes.size() <<endl;
-  }
-
-  if(m_paras->camera.getBool("Show SDF Slice Y"))
-  {
-    float y_pos = (sdf_mesh->bbox.min.Y() + sdf_mesh->bbox.max.Y() ) / 2.0f;
-    GlobalFun::computePointsOnPlane(sdf_mesh, 'Y', y_pos, (*sdf_slices)[1].slice_nodes);
-    cout<<"sdf y slice node num: " <<(*area->dataMgr.getCurrentSDFSlices())[1].slice_nodes.size() <<endl;
-  }
-
-  if(m_paras->camera.getBool("Show SDF Slice Z"))
-  {
-    float z_pos = (sdf_mesh->bbox.min.Z() + sdf_mesh->bbox.max.Z() ) / 2.0f;
-    GlobalFun::computePointsOnPlane(sdf_mesh, 'Z', z_pos, (*sdf_slices)[2].slice_nodes);
-    cout<<"sdf z slice node num: " <<(*area->dataMgr.getCurrentSDFSlices())[2].slice_nodes.size() <<endl;
-  }
+  global_paraMgr.nbv.setValue("Run SDF Slice", BoolValue(true));
+  area->runNBV();
+  global_paraMgr.nbv.setValue("Run SDF Slice", BoolValue(false));
 }
