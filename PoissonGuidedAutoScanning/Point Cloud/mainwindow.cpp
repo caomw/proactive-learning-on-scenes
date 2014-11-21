@@ -227,7 +227,7 @@ void MainWindow::iniStatusBar()
 
 void MainWindow::updateStatusBar()
 {
-	QString title = strTitle +  " -- " + area->dataMgr.curr_file_name;
+	QString title = strTitle +  " -- " + area->dataMgr.cur_file_name;
 	setWindowTitle(title);
 
 	int o_size = 0;

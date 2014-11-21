@@ -145,6 +145,7 @@ public:
   bool is_visible;
   bool is_barely_visible;
   bool is_boundary;
+  bool is_sdf;
 	int m_index;
 
 	bool is_fixed_sample; //feature points (blue color) 
@@ -197,6 +198,7 @@ public:
     is_poisson(false),
 		is_fixed_sample(false),
     is_boundary(false),
+    is_sdf(false),
 		eigen_confidence(-1),
 		is_ignore(false),
     is_field_grid(false),

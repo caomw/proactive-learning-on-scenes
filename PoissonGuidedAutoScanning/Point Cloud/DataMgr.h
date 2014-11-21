@@ -146,7 +146,7 @@ public:
 
 	RichParameterSet*      para;
 	double                 init_radius;
-	QString                curr_file_name;
+	QString                cur_file_name;
 
   Box3f                  whole_space_box;
   Point3f                scanner_position;  
@@ -157,6 +157,7 @@ public:
   Slices                 sdf_slices;
 
   void                   loadPlyToSDFVoxel(QString fileName);
+  void                   loadOwnToSDFVoxel(QString fileName);
   CMesh*                 getSDFVoxels();
   bool                   isSDFVoxelsEmpty();
   Slices*                getCurrentSDFSlices();

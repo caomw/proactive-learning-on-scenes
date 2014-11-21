@@ -123,10 +123,10 @@ bool DataMgr::isSDFVoxelsEmpty()
 void DataMgr::loadPlyToModel(QString fileName)
 {
   clearCMesh(model);
-  curr_file_name = fileName;
+  cur_file_name = fileName;
 
   int mask = tri::io::Mask::IOM_ALL;
-  int err = tri::io::Importer<CMesh>::Open(model, curr_file_name.toAscii().data(), mask);
+  int err = tri::io::Importer<CMesh>::Open(model, cur_file_name.toAscii().data(), mask);
   if (err)
   {
     cout<<"Failed to read model: "<< err <<"\n";
@@ -148,12 +148,12 @@ void DataMgr::loadPlyToModel(QString fileName)
 void DataMgr::loadPlyToOriginal(QString fileName)
 {
   clearCMesh(original);
-  curr_file_name = fileName;
+  cur_file_name = fileName;
 
   int mask= tri::io::Mask::IOM_VERTCOORD + tri::io::Mask::IOM_VERTNORMAL; 
     //+ tri::io::Mask::IOM_ALL + tri::io::Mask::IOM_FACEINDEX;
 
-  int err = tri::io::Importer<CMesh>::Open(original, curr_file_name.toAscii().data(), mask);  
+  int err = tri::io::Importer<CMesh>::Open(original, cur_file_name.toAscii().data(), mask);  
   if(err) 
   {
     cout << "Failed reading mesh: " << err << "\n";
@@ -179,14 +179,14 @@ void DataMgr::loadPlyToOriginal(QString fileName)
 void DataMgr::loadPlyToSample(QString fileName)
 {
   clearCMesh(samples);
-  curr_file_name = fileName;
+  cur_file_name = fileName;
 
   int mask= tri::io::Mask::IOM_VERTCOORD + tri::io::Mask::IOM_VERTNORMAL ;
   mask += tri::io::Mask::IOM_VERTCOLOR;
   mask += tri::io::Mask::IOM_BITPOLYGONAL;
   mask += tri::io::Mask::IOM_ALL;
 
-  int err = tri::io::Importer<CMesh>::Open(samples, curr_file_name.toAscii().data(), mask);  
+  int err = tri::io::Importer<CMesh>::Open(samples, cur_file_name.toAscii().data(), mask);  
   if(err) 
   {
     cout << "Failed reading mesh: " << err << "\n";
@@ -207,13 +207,13 @@ void DataMgr::loadPlyToSample(QString fileName)
 void DataMgr::loadPlyToISO(QString fileName)
 {
   clearCMesh(iso_points);
-  curr_file_name = fileName;
+  cur_file_name = fileName;
 
   int mask= tri::io::Mask::IOM_VERTCOORD + tri::io::Mask::IOM_VERTNORMAL ;
   mask += tri::io::Mask::IOM_VERTCOLOR;
   mask += tri::io::Mask::IOM_BITPOLYGONAL;
 
-  int err = tri::io::Importer<CMesh>::Open(iso_points, curr_file_name.toAscii().data(), mask);  
+  int err = tri::io::Importer<CMesh>::Open(iso_points, cur_file_name.toAscii().data(), mask);  
   if(err) 
   {
     cout << "Failed reading mesh: " << err << "\n";
@@ -234,11 +234,11 @@ void DataMgr::loadPlyToISO(QString fileName)
 void DataMgr::loadPlyToPoisson(QString fileName)
 {
   clearCMesh(poisson_surface);
-  curr_file_name = fileName;
+  cur_file_name = fileName;
 
   int mask= tri::io::Mask::IOM_VERTCOORD + tri::io::Mask::IOM_VERTNORMAL ;
 
-  int err = tri::io::Importer<CMesh>::Open(poisson_surface, curr_file_name.toAscii().data(), mask);  
+  int err = tri::io::Importer<CMesh>::Open(poisson_surface, cur_file_name.toAscii().data(), mask);  
   if(err) 
   {
     cout << "Failed reading mesh: " << err << "\n";
@@ -260,14 +260,14 @@ void DataMgr::loadPlyToPoisson(QString fileName)
 void DataMgr::loadPlyToNBV(QString fileName)
 {
   clearCMesh(nbv_candidates);
-  curr_file_name = fileName;
+  cur_file_name = fileName;
 
   int mask= tri::io::Mask::IOM_VERTCOORD + tri::io::Mask::IOM_VERTNORMAL ;
   mask += tri::io::Mask::IOM_VERTCOLOR;
   mask += tri::io::Mask::IOM_BITPOLYGONAL;
   mask += tri::io::Mask::IOM_ALL;
 
-  int err = tri::io::Importer<CMesh>::Open(nbv_candidates, curr_file_name.toAscii().data(), mask);  
+  int err = tri::io::Importer<CMesh>::Open(nbv_candidates, cur_file_name.toAscii().data(), mask);  
   if(err) 
   {
     cout << "Failed reading mesh: " << err << "\n";
@@ -369,11 +369,11 @@ void DataMgr::loadImage(QString fileName)
 void DataMgr::loadCameraModel(QString fileName)
 {
   clearCMesh(camera_model);
-  curr_file_name = fileName;
+  cur_file_name = fileName;
   int mask = tri::io::Mask::IOM_VERTCOORD + tri::io::Mask::IOM_VERTNORMAL;
   mask += tri::io::Mask::IOM_FACEFLAGS;
 
-  int err = tri::io::Importer<CMesh>::Open(camera_model, curr_file_name.toAscii().data(), mask);
+  int err = tri::io::Importer<CMesh>::Open(camera_model, cur_file_name.toAscii().data(), mask);
   if (err)
   {
     cout<<"Failed to read camera model: "<< err << "\n";
@@ -1159,12 +1159,12 @@ void DataMgr::replaceMeshView(CMesh& src_mesh, CMesh& target_mesh, bool isViewGr
 void DataMgr::loadPlyToSDFVoxel( QString fileName )
 {
   clearCMesh(sdf_voxels);
-  curr_file_name = fileName;
+  cur_file_name = fileName;
 
-  int mask= tri::io::Mask::IOM_VERTCOORD + tri::io::Mask::IOM_VERTNORMAL; 
+  int mask= tri::io::Mask::IOM_VERTCOORD + tri::io::Mask::IOM_VERTCOLOR; 
   //+ tri::io::Mask::IOM_ALL + tri::io::Mask::IOM_FACEINDEX;
 
-  int err = tri::io::Importer<CMesh>::Open(sdf_voxels, curr_file_name.toAscii().data(), mask);  
+  int err = tri::io::Importer<CMesh>::Open(sdf_voxels, cur_file_name.toAscii().data(), mask);  
   if(err) 
   {
     cout << "Failed reading mesh: " << err << "\n";
@@ -1178,10 +1178,44 @@ void DataMgr::loadPlyToSDFVoxel( QString fileName )
   int idx = 0;
   for(vi = sdf_voxels.vert.begin(); vi != sdf_voxels.vert.end(); ++vi)
   {
+    vi->is_sdf = true;
     vi->m_index = idx++;
     vi->N().Normalize();
     //vi->N() = Point3f(0, 0, 0);
     sdf_voxels.bbox.Add(vi->P());
   }
   sdf_voxels.vn = sdf_voxels.vert.size();
+}
+
+void DataMgr::loadOwnToSDFVoxel(QString fileName)
+{
+  clearCMesh((sdf_voxels));
+  cur_file_name = fileName;
+
+  ifstream sdf_in;
+  sdf_in.open(cur_file_name.toAscii().data());
+  stringstream ss;
+  string str_line;
+  string str_x, str_y, str_z, str_sdf;
+  int index = 0;
+  while(getline(sdf_in, str_line)){
+    ss.clear();
+    ss<<str_line;
+    ss>>str_x >>str_y >>str_z >>str_sdf;
+
+    CVertex t;
+    t.P()[0] = stof(str_x);
+    t.P()[1] = stof(str_y);
+    t.P()[2] = stof(str_z);
+    t.eigen_confidence = stof(str_sdf);
+    t.m_index = index++;
+    t.is_sdf = true;
+    sdf_voxels.vert.push_back(t);
+    sdf_voxels.bbox.Add(t.P());
+  }
+  sdf_voxels.vn = sdf_voxels.vert.size();
+  GlobalFun::normalizeConfidence(sdf_voxels.vert, 0);
+  sdf_in.close();
+
+  std::cout<<"sdf voxel num: " <<sdf_voxels.vert.size() <<endl;
 }

@@ -664,7 +664,7 @@ public:
 		std::ofstream sdf_out;
 		sdf_out.open("./DataDump/sdf.ply");
 		//write header
-		sdf_out << "ply\n";
+		/*sdf_out << "ply\n";
 		sdf_out << "format ascii 1.0\n";
 		sdf_out << "comment MLIB generated\n";
 		sdf_out << "element vertex " << 0 << "\n";
@@ -678,7 +678,7 @@ public:
 
 		sdf_out << "element face " << 0 << "\n";
 		sdf_out << "property list uchar int vertex_indices\n";
-		sdf_out << "end_header\n";
+		sdf_out << "end_header\n";*/
 
 		int chunkNum = 0;
 		//遍历每个grid，一共有257 * 257 *257个grid， grid是由chunk组成
@@ -748,9 +748,12 @@ public:
 									vec3i voxelColor = VoxelUtilHelper::getColorBySDF(vBlock.voxels[j].sdf, VoxelUtilHelper::g_min_sdf, VoxelUtilHelper::g_max_sdf);
 
 									++point_num;
-									sdf_out <<voxelWordPos.x <<" " <<voxelWordPos.y <<" " <<voxelWordPos.z 
+									//in ply format
+									/*sdf_out <<voxelWordPos.x <<" " <<voxelWordPos.y <<" " <<voxelWordPos.z 
 										<<" " <<voxelColor.x <<" " <<voxelColor.g <<" " <<voxelColor.b <<" "
-										<<std::endl;
+										<<std::endl;*/
+									//in own format
+									sdf_out <<voxelWordPos.x <<" " <<voxelWordPos.y <<" " <<voxelWordPos.z <<" " << sdf <<std::endl;
 									//输出vBlock.voxels[j]的世界坐标即可，大vBlock的坐标在m_ChunkDesc中，这里需要计算出小voxel的坐标，需要，我添加了
 									//delinear的方法来解决这个问题
 								}

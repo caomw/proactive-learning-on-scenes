@@ -290,6 +290,10 @@ GLColor GLDrawer::getColorByType(CVertex& v)
   if (v.is_scanned)
     return cRed;
 
+  if(v.is_sdf){
+    return isoValue2Color(v.eigen_confidence, iso_color_scale, iso_value_shift, true);
+  }
+
   if (bUseConfidenceColor)
     return isoValue2Color(v.eigen_confidence, sample_cofidence_color_scale, iso_value_shift, true);
   else

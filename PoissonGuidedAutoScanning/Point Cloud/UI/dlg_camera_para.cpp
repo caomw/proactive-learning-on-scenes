@@ -1166,7 +1166,7 @@ void CameraParaDlg::loadSDFVoxels()
   QString file = QFileDialog::getOpenFileName(this, "Select a ply file", "", "*.ply");
   if(!file.size()) return;
 
-  area->dataMgr.loadPlyToSDFVoxel(file);
+  area->dataMgr.loadOwnToSDFVoxel(file);
   std:cout<<"sdf point num: " <<area->dataMgr.getSDFVoxels()->vert.size() <<endl;
 }
 
