@@ -192,6 +192,84 @@
       <string>Step2: Compute NBV</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="pushButton_load_sdf_voxels">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>460</y>
+       <width>221</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Load SDF Voxel</string>
+     </property>
+    </widget>
+    <widget class="Line" name="line_6">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>430</y>
+       <width>231</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_run_sdf_slice">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>570</y>
+       <width>221</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>SDF Slice</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_show_sdf_slice_X">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>530</y>
+       <width>71</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Show X</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_show_sdf_slice_Y">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>530</y>
+       <width>71</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Show Y</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_show_sdf_slice_Z">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>530</y>
+       <width>71</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Show Z</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="tab">
     <attribute name="title">

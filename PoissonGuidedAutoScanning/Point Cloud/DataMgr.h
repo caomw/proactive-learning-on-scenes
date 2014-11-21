@@ -151,4 +151,13 @@ public:
   Box3f                  whole_space_box;
   Point3f                scanner_position;  
   int                    scan_count;
+
+  //sdf related
+  CMesh                  sdf_voxels;
+  Slices                 sdf_slices;
+
+  void                   loadPlyToSDFVoxel(QString fileName);
+  CMesh*                 getSDFVoxels();
+  bool                   isSDFVoxelsEmpty();
+  Slices*                getCurrentSDFSlices();
 };

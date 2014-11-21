@@ -433,6 +433,32 @@ void GLArea::paintGL()
       }
     }
 
+    //sdf related
+    if (para->getBool("Show SDF Voxels"))
+    {
+      CMesh* sdf_voxels = dataMgr.getSDFVoxels();
+      if (!dataMgr.isSDFVoxelsEmpty())
+      {
+        glDrawer.draw(GLDrawer::DOT, sdf_voxels);
+      }
+    }
+
+    if (para->getBool("Show SDF Slices"))
+    {
+      if (global_paraMgr.camera.getBool("Show SDF Slice X"))
+      {
+        glDrawer.drawSDFSlice((*dataMgr.getCurrentSDFSlices())[0], 1);
+      }
+      if (global_paraMgr.camera.getBool("Show SDF Slice Y"))
+      {
+        glDrawer.drawSDFSlice((*dataMgr.getCurrentSDFSlices())[1], 1);
+      }
+      if (global_paraMgr.camera.getBool("Show SDF Slice Z"))
+      {
+        glDrawer.drawSDFSlice((*dataMgr.getCurrentSDFSlices())[2], 1);
+      }
+    }
+
     if (para->getBool("Show Scanned Mesh"))
     {
       //draw scanned mesh
@@ -476,6 +502,7 @@ void GLArea::paintGL()
           glDrawer.draw(GLDrawer::SPHERE, dataMgr.getCurrentPoissonSurface());	
       }
     }
+
 
     if (para->getBool("Show Bounding Box") && para->getBool("Show View Grid Slice"))
     {

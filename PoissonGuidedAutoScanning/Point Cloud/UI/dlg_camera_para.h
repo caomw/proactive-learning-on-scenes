@@ -96,6 +96,14 @@ signals:
         
     void getModelSize();
 
+    //sdf related
+    void loadSDFVoxels();
+    void runSDFSlice();
+
+    void showSDFSliceX(bool _val);
+    void showSDFSliceY(bool _val);
+    void showSDFSliceZ(bool _val);
+
 private:
   Ui::camera_paras * ui;
   ParameterMgr * m_paras;

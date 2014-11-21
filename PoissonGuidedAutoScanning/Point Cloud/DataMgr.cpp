@@ -13,6 +13,7 @@ DataMgr::DataMgr(RichParameterSet* _para)
   whole_space_box.Add(Point3f(-2.0, -2.0, -2.0));
   scanner_position = Point3f(134, 13, -293); //sheep 5-19
   slices.assign(3, Slice());
+  sdf_slices.assign(3, Slice());
 }
 
 DataMgr::~DataMgr(void)
@@ -112,6 +113,11 @@ bool DataMgr::isViewGridsEmpty()
 bool DataMgr::isNBVCandidatesEmpty()
 {
   return nbv_candidates.vert.empty();
+}
+
+bool DataMgr::isSDFVoxelsEmpty()
+{
+  return sdf_voxels.vert.empty();
 }
 
 void DataMgr::loadPlyToModel(QString fileName)
@@ -470,10 +476,14 @@ double DataMgr::getCameraMaxAngle()
   return camera_max_angle;
 }
 
-CMesh*
-  DataMgr::getViewGridPoints()
+CMesh*  DataMgr::getViewGridPoints()
 {
   return &view_grid_points;
+}
+
+CMesh* DataMgr::getSDFVoxels()
+{
+  return &sdf_voxels;
 }
 
 CMesh* DataMgr::getNbvCandidates()
@@ -519,6 +529,11 @@ int* DataMgr::getScanCount()
 Slices* DataMgr::getCurrentSlices()
 {
   return &slices;
+}
+
+Slices* DataMgr::getCurrentSDFSlices()
+{
+  return &sdf_slices;
 }
 
 void DataMgr::recomputeBox()
@@ -795,8 +810,10 @@ void DataMgr::clearData()
   clearCMesh(view_grid_points);
   clearCMesh(nbv_candidates);
   clearCMesh(current_scanned_mesh);
+  clearCMesh(sdf_voxels);
 
   slices.clear();
+  sdf_slices.clear();
 }
 
 void DataMgr::recomputeQuad()
@@ -1125,4 +1142,35 @@ void DataMgr::replaceMeshView(CMesh& src_mesh, CMesh& target_mesh, bool isViewGr
   }
   target_mesh.vn = src_mesh.vn;
   target_mesh.bbox = src_mesh.bbox;
+}
+
+//sdf related
+void DataMgr::loadPlyToSDFVoxel( QString fileName )
+{
+  clearCMesh(sdf_voxels);
+  curr_file_name = fileName;
+
+  int mask= tri::io::Mask::IOM_VERTCOORD + tri::io::Mask::IOM_VERTNORMAL; 
+  //+ tri::io::Mask::IOM_ALL + tri::io::Mask::IOM_FACEINDEX;
+
+  int err = tri::io::Importer<CMesh>::Open(sdf_voxels, curr_file_name.toAscii().data(), mask);  
+  if(err) 
+  {
+    cout << "Failed reading mesh: " << err << "\n";
+    return;
+  }  
+  cout << "points loaded\n";
+
+  vcg::tri::UpdateNormals<CMesh>::PerVertex(sdf_voxels);
+
+  CMesh::VertexIterator vi;
+  int idx = 0;
+  for(vi = sdf_voxels.vert.begin(); vi != sdf_voxels.vert.end(); ++vi)
+  {
+    vi->m_index = idx++;
+    vi->N().Normalize();
+    //vi->N() = Point3f(0, 0, 0);
+    sdf_voxels.bbox.Add(vi->P());
+  }
+  sdf_voxels.vn = sdf_voxels.vert.size();
 }

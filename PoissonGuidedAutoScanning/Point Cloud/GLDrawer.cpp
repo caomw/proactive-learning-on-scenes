@@ -754,6 +754,18 @@ void GLDrawer::drawSlice(Slice& slice, double trans_val)
 	}
 }
 
+//»æÖÆsdfµÄÇÐÆ¬
+void GLDrawer::drawSDFSlice(Slice &slice, double trans_value)
+{
+  if (slice.slice_nodes.empty()){
+    return;
+  }
+
+  for (size_t i = 0; i < slice.slice_nodes.size(); ++i)
+  {
+    drawDot(slice.slice_nodes[i]);
+  }
+}
 
 void GLDrawer::drawMeshLables(CMesh *mesh, QPainter *painter)
 {

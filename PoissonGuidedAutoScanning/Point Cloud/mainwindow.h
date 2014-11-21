@@ -102,6 +102,10 @@ private slots:
   void showScannedMesh(bool _val);
   void showPoissonSurface(bool _val);
 
+  //sdf related
+  void showSDFVoxels(bool _val);
+  void showSDFSlices(bool _val);
+
 	void setSmapleType(QAction * action);
 	void setOriginalType(QAction * action);
 

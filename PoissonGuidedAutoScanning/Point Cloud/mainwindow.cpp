@@ -66,6 +66,9 @@ void MainWindow::initWidgets()
   ui.actionShow_Poisson_Surface->setChecked(paras->glarea.getBool("Show Poisson Surface"));
   ui.actionShow_NBV_Label->setChecked(paras->glarea.getBool("Show NBV Label"));
   ui.actionShow_NBV_Ball->setChecked(paras->glarea.getBool("Show NBV Ball"));
+  //sdf related
+  ui.actionShow_SDF_Voxels->setChecked(paras->glarea.getBool("Show SDF Voxels"));
+  ui.actionShow_SDF_Voxels->setChecked(paras->glarea.getBool("Show SDF Slices"));
 }
 
 void MainWindow::initConnect()
@@ -131,8 +134,7 @@ void MainWindow::initConnect()
   connect(ui.actionShow_Scan_Candidates, SIGNAL(toggled(bool)), this, SLOT(showScanCandidates(bool)));
   connect(ui.actionShow_Scan_History, SIGNAL(toggled(bool)), this, SLOT(showScanHistory(bool)));
   connect(ui.actionShow_Current_Scanned_Mesh, SIGNAL(toggled(bool)), this, SLOT(showScannedMesh(bool)));
-  connect(ui.actionShow_Poisson_Surface, SIGNAL(toggled(bool)), this, SLOT(showPoissonSurface(bool)));
-
+  connect(ui.actionShow_Poisson_Surface, SIGNAL(toggled(bool)), this, SLOT(showPoissonSurface(bool)));  
 	connect(sample_draw_type,SIGNAL(triggered(QAction *)),this,SLOT(setSmapleType(QAction *)));
 	connect(original_draw_type,SIGNAL(triggered(QAction *)),this,SLOT(setOriginalType(QAction *)));
 
@@ -162,6 +164,10 @@ void MainWindow::initConnect()
 
   //connect(ui.actionPoisson_test,SIGNAL(triggered()),this,SLOT(poissonTest()));
   //connect(ui.actionPoisson_test_all,SIGNAL(triggered()),this,SLOT(poissonTestAll()));
+
+  //sdf related
+  connect(ui.actionShow_SDF_Voxels, SIGNAL(toggled(bool)), this, SLOT(showSDFVoxels(bool)));
+  connect(ui.actionShow_SDF_Slices, SIGNAL(toggled(bool)), this, SLOT(showSDFSlices(bool)));
 
 	QTimer *timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this->area, SLOT(update()));
@@ -618,6 +624,18 @@ void MainWindow::showScanCandidates(bool _val)
 void MainWindow::showScanHistory(bool _val)
 {
   paras->glarea.setValue("Show Scan History", BoolValue(_val));
+  area->updateGL();
+}
+
+void MainWindow::showSDFVoxels(bool _val)
+{
+  paras->glarea.setValue("Show SDF Voxels", BoolValue(_val));
+  area->updateGL();
+}
+
+void MainWindow::showSDFSlices(bool _val)
+{
+  paras->glarea.setValue("Show SDF Slices", BoolValue(_val));
   area->updateGL();
 }
 

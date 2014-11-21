@@ -71,7 +71,7 @@ void ParameterMgr::initGlareaParameter()
 	glarea.addParam(new RichBool("Show Scan Candidates", true));
   glarea.addParam(new RichBool("Show Scan History", false));
 	glarea.addParam(new RichBool("Show Scanned Mesh", true));
-
+  
 	glarea.addParam(new RichBool("Show Model", true));
 	glarea.addParam(new RichBool("Show Original", true) );
 	glarea.addParam(new RichBool("Show Original Quad", false) );
@@ -126,6 +126,9 @@ void ParameterMgr::initGlareaParameter()
 	glarea.addParam(new RichBool("No Snap Radius", false));
 	glarea.addParam(new RichBool("All Octree Nodes", false));
   glarea.addParam(new RichBool("Show Poisson Surface", false));
+  //sdf related
+  glarea.addParam(new RichBool("Show SDF Slices",true));
+  glarea.addParam(new RichBool("Show SDF Voxels", true));
 }
 
 void ParameterMgr::initDrawerParameter()
@@ -266,6 +269,11 @@ void ParameterMgr::initCameraParameter()
   camera.addParam(new RichDouble("Camera Resolution",1.0f / 50.0f));
   camera.addParam(new RichDouble("Merge Confidence Threshold", 0.9f));
   camera.addParam(new RichDouble("Grid Step Size", -1));
+
+  //sdf related
+  camera.addParam(new RichBool("Show SDF Slice X", false));
+  camera.addParam(new RichBool("Show SDF Slice Y", false));
+  camera.addParam(new RichBool("Show SDF Slice Z", false));
 }
 
 void ParameterMgr::initNBVParameter()

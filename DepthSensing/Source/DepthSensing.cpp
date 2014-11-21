@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
 		}
 		std::cout << VAR_NAME(fileNameDescGlobalApp) << " = " << fileNameDescGlobalApp << std::endl;
 		std::cout << VAR_NAME(fileNameDescGlobalTracking) << " = " << fileNameDescGlobalTracking << std::endl;
-		
+
 		//Read the global app state
 		ParameterFile parameterFileGlobalApp(fileNameDescGlobalApp);
 		GlobalAppState::getInstance().readMembers(parameterFileGlobalApp);
@@ -228,7 +228,7 @@ void RenderHelp()
 // Handle messages to the application
 //--------------------------------------------------------------------------------------
 LRESULT CALLBACK MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing,
-	void* pUserContext )
+						 void* pUserContext )
 {
 	// Pass messages to dialog resource manager calls so GUI state is updated correctly
 	*pbNoFurtherProcessing = g_DialogResourceManager.MsgProc( hWnd, uMsg, wParam, lParam );
@@ -270,7 +270,7 @@ void StopScanningAndExtractIsoSurfaceMC()
 
 	mat4f rigidTransform = g_SceneRepSDFLocal.GetLastRigidTransform();
 	DX11MarchingCubesChunkGrid::extractIsoSurface(DXUTGetD3D11DeviceContext(), g_SceneRepChunkGrid, g_SceneRepSDFLocal, p, GlobalAppState::getInstance().s_StreamingRadius, "./Scans/scan.ply", &rigidTransform);
-  
+
 	std::cout << "Mesh Processing Time " << t.getElapsedTime() << " seconds" << std::endl;
 
 	g_SceneRepChunkGrid.startMultiThreading(DXUTGetD3D11DeviceContext());
@@ -294,7 +294,7 @@ void StopScanningAndDumpVoxelHash() {//wei
 	vec3f p(posWorld.x, posWorld.y, posWorld.z);
 	mat4f rigidTransform = g_SceneRepSDFLocal.GetLastRigidTransform();
 
-  std::cout<<"**********************************file saved in:" << GlobalAppState::getInstance().s_DumpVoxelGridFile <<std::endl;
+	std::cout<<"**********************************file saved in:" << GlobalAppState::getInstance().s_DumpVoxelGridFile <<std::endl;
 	g_SceneRepChunkGrid.DumpVoxelHash(DXUTGetD3D11DeviceContext(), GlobalAppState::getInstance().s_DumpVoxelGridFile + ".dump", g_SceneRepSDFLocal, p, GlobalAppState::getInstance().s_StreamingRadius);//wei
 	std::cout << "sun wei done!" << std::endl;
 
@@ -442,41 +442,41 @@ void CALLBACK OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserC
 			DX11HistogramHashSDF::computeHistrogram(DXUTGetD3D11DeviceContext(), g_SceneRepSDFLocal.GetHashSRV(), g_SceneRepSDFLocal.MapAndGetConstantBuffer(DXUTGetD3D11DeviceContext()), g_SceneRepSDFLocal.GetHashNumBuckets(), g_SceneRepSDFLocal.GetHashBucketSize(), "localHash");
 			break;
 
-		//case '8':
+			//case '8':
 
-		//	DX11MarchingCubesHashSDF::clearMeshBuffer();
-		//	DX11MarchingCubesHashSDF::extractIsoSurface(DXUTGetD3D11DeviceContext(), g_SceneRepSDFLocal.GetHashSRV(), g_SceneRepSDFLocal.GetSDFBlocksSDFSRV(), g_SceneRepSDFLocal.GetSDFBlocksRGBWSRV(), g_SceneRepSDFLocal.MapAndGetConstantBuffer(DXUTGetD3D11DeviceContext()), g_SceneRepSDFLocal.GetHashNumBuckets(), g_SceneRepSDFLocal.GetHashBucketSize());
-		//	DX11MarchingCubesHashSDF::saveMesh("dumpLocal.off");
+			//	DX11MarchingCubesHashSDF::clearMeshBuffer();
+			//	DX11MarchingCubesHashSDF::extractIsoSurface(DXUTGetD3D11DeviceContext(), g_SceneRepSDFLocal.GetHashSRV(), g_SceneRepSDFLocal.GetSDFBlocksSDFSRV(), g_SceneRepSDFLocal.GetSDFBlocksRGBWSRV(), g_SceneRepSDFLocal.MapAndGetConstantBuffer(DXUTGetD3D11DeviceContext()), g_SceneRepSDFLocal.GetHashNumBuckets(), g_SceneRepSDFLocal.GetHashBucketSize());
+			//	DX11MarchingCubesHashSDF::saveMesh("dumpLocal.off");
 
-		//	DX11MarchingCubesHashSDF::clearMeshBuffer();
-		//	DX11MarchingCubesHashSDF::extractIsoSurface(DXUTGetD3D11DeviceContext(), g_SceneRepSDFGlobal.GetHashSRV(), g_SceneRepSDFLocal.GetSDFBlocksSDFSRV(), g_SceneRepSDFLocal.GetSDFBlocksRGBWSRV(), g_SceneRepSDFGlobal.MapAndGetConstantBuffer(DXUTGetD3D11DeviceContext()), g_SceneRepSDFGlobal.GetHashNumBuckets(), g_SceneRepSDFGlobal.GetHashBucketSize());
-		//	DX11MarchingCubesHashSDF::saveMesh("dumpGlobal.off");
+			//	DX11MarchingCubesHashSDF::clearMeshBuffer();
+			//	DX11MarchingCubesHashSDF::extractIsoSurface(DXUTGetD3D11DeviceContext(), g_SceneRepSDFGlobal.GetHashSRV(), g_SceneRepSDFLocal.GetSDFBlocksSDFSRV(), g_SceneRepSDFLocal.GetSDFBlocksRGBWSRV(), g_SceneRepSDFGlobal.MapAndGetConstantBuffer(DXUTGetD3D11DeviceContext()), g_SceneRepSDFGlobal.GetHashNumBuckets(), g_SceneRepSDFGlobal.GetHashBucketSize());
+			//	DX11MarchingCubesHashSDF::saveMesh("dumpGlobal.off");
 
-		//	//g_SceneRepSDFLocal.RunCompactifyForView(DXUTGetD3D11DeviceContext());
-		//	//g_SceneRepSDFGlobal.RunCompactifyForView(DXUTGetD3D11DeviceContext());
-		//	//std::cout << "global before: " << g_SceneRepSDFGlobal.GetNumOccupiedHashEntries() << std::endl;
-		//	//std::cout << "local before: " << g_SceneRepSDFLocal.GetNumOccupiedHashEntries() << std::endl;
+			//	//g_SceneRepSDFLocal.RunCompactifyForView(DXUTGetD3D11DeviceContext());
+			//	//g_SceneRepSDFGlobal.RunCompactifyForView(DXUTGetD3D11DeviceContext());
+			//	//std::cout << "global before: " << g_SceneRepSDFGlobal.GetNumOccupiedHashEntries() << std::endl;
+			//	//std::cout << "local before: " << g_SceneRepSDFLocal.GetNumOccupiedHashEntries() << std::endl;
 
-		//	g_SceneRepSDFLocal.RemoveAndIntegrateToOther(DXUTGetD3D11DeviceContext(), &g_SceneRepSDFGlobal, NULL, false);
+			//	g_SceneRepSDFLocal.RemoveAndIntegrateToOther(DXUTGetD3D11DeviceContext(), &g_SceneRepSDFGlobal, NULL, false);
 
-		//	//g_SceneRepSDFLocal.RunCompactifyForView(DXUTGetD3D11DeviceContext());
-		//	//g_SceneRepSDFGlobal.RunCompactifyForView(DXUTGetD3D11DeviceContext());
-		//	//std::cout << "global after: " << g_SceneRepSDFGlobal.GetNumOccupiedHashEntries() << std::endl;
-		//	//std::cout << "local after: " << g_SceneRepSDFLocal.GetNumOccupiedHashEntries() << std::endl;
-		//	
-		//	DX11MarchingCubesHashSDF::clearMeshBuffer();
-		//	DX11MarchingCubesHashSDF::extractIsoSurface(DXUTGetD3D11DeviceContext(), g_SceneRepSDFGlobal.GetHashSRV(), g_SceneRepSDFLocal.GetSDFBlocksSDFSRV(), g_SceneRepSDFLocal.GetSDFBlocksRGBWSRV(), g_SceneRepSDFGlobal.MapAndGetConstantBuffer(DXUTGetD3D11DeviceContext()), g_SceneRepSDFGlobal.GetHashNumBuckets(), g_SceneRepSDFGlobal.GetHashBucketSize());
-		//	DX11MarchingCubesHashSDF::saveMesh("dumpBoth.off");
+			//	//g_SceneRepSDFLocal.RunCompactifyForView(DXUTGetD3D11DeviceContext());
+			//	//g_SceneRepSDFGlobal.RunCompactifyForView(DXUTGetD3D11DeviceContext());
+			//	//std::cout << "global after: " << g_SceneRepSDFGlobal.GetNumOccupiedHashEntries() << std::endl;
+			//	//std::cout << "local after: " << g_SceneRepSDFLocal.GetNumOccupiedHashEntries() << std::endl;
+			//	
+			//	DX11MarchingCubesHashSDF::clearMeshBuffer();
+			//	DX11MarchingCubesHashSDF::extractIsoSurface(DXUTGetD3D11DeviceContext(), g_SceneRepSDFGlobal.GetHashSRV(), g_SceneRepSDFLocal.GetSDFBlocksSDFSRV(), g_SceneRepSDFLocal.GetSDFBlocksRGBWSRV(), g_SceneRepSDFGlobal.MapAndGetConstantBuffer(DXUTGetD3D11DeviceContext()), g_SceneRepSDFGlobal.GetHashNumBuckets(), g_SceneRepSDFGlobal.GetHashBucketSize());
+			//	DX11MarchingCubesHashSDF::saveMesh("dumpBoth.off");
 
-		//	//DX11VoxelGridOperations::extractIsoSurface(DXUTGetD3D11DeviceContext(), DX11VoxelGrid::getBufferDataSRV(), DX11VoxelGrid::getPosition(), DX11VoxelGrid::getGridDimensions(), DX11VoxelGrid::getVoxelExtends());
-		//	
-		//	g_SceneRepSDFGlobal.RemoveAndIntegrateToOther(DXUTGetD3D11DeviceContext(), &g_SceneRepSDFLocal, NULL, false);
+			//	//DX11VoxelGridOperations::extractIsoSurface(DXUTGetD3D11DeviceContext(), DX11VoxelGrid::getBufferDataSRV(), DX11VoxelGrid::getPosition(), DX11VoxelGrid::getGridDimensions(), DX11VoxelGrid::getVoxelExtends());
+			//	
+			//	g_SceneRepSDFGlobal.RemoveAndIntegrateToOther(DXUTGetD3D11DeviceContext(), &g_SceneRepSDFLocal, NULL, false);
 
-		//	//g_SceneRepSDFLocal.RunCompactifyForView(DXUTGetD3D11DeviceContext());
-		//	//g_SceneRepSDFGlobal.RunCompactifyForView(DXUTGetD3D11DeviceContext());
-		//	//std::cout << "global after after : " << g_SceneRepSDFGlobal.GetNumOccupiedHashEntries() << std::endl;
-		//	//std::cout << "local after after : " << g_SceneRepSDFLocal.GetNumOccupiedHashEntries() << std::endl;
-		//	break;
+			//	//g_SceneRepSDFLocal.RunCompactifyForView(DXUTGetD3D11DeviceContext());
+			//	//g_SceneRepSDFGlobal.RunCompactifyForView(DXUTGetD3D11DeviceContext());
+			//	//std::cout << "global after after : " << g_SceneRepSDFGlobal.GetNumOccupiedHashEntries() << std::endl;
+			//	//std::cout << "local after after : " << g_SceneRepSDFLocal.GetNumOccupiedHashEntries() << std::endl;
+			//	break;
 		case '8':
 			{
 				if (GlobalAppState::getInstance().s_RecordData) {
@@ -487,7 +487,7 @@ void CALLBACK OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserC
 		case '9':
 			{
 				StopScanningAndExtractIsoSurfaceMC();
-        std::cout<<"wei save mesh done!" <<std::endl;
+				std::cout<<"wei save mesh done!" <<std::endl;
 				break;
 			}
 		case 'G':
@@ -509,18 +509,18 @@ void CALLBACK OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserC
 				//break; 
 				StopScanningAndDumpVoxelHash();
 			}
-      break;
-    case 'A':
-      {
-        GlobalAppState::getInstance().s_DisplayTexture = GlobalAppState::POINT_TEXTURE;
-        MeshDataf mesh;
-        std::string myPly = "Scans\\box.ply";
-        MeshIO<float>::loadFromPLY(myPly, mesh);
-        std::cout<<mesh.m_Vertices.size() <<std::endl;
-        std::cout<<mesh.m_Normals.size() <<std::endl;
-        
-      }
-      break;
+			break;
+		case 'A':
+			{
+				GlobalAppState::getInstance().s_DisplayTexture = GlobalAppState::POINT_TEXTURE;
+				MeshDataf mesh;
+				std::string myPly = "Scans\\box.ply";
+				MeshIO<float>::loadFromPLY(myPly, mesh);
+				std::cout<<mesh.m_Vertices.size() <<std::endl;
+				std::cout<<mesh.m_Normals.size() <<std::endl;
+
+			}
+			break;
 		default:
 			break;
 		}
@@ -644,7 +644,7 @@ void CALLBACK OnD3D11DestroyDevice( void* pUserContext )
 // Create any D3D11 resources that depend on the back buffer
 //--------------------------------------------------------------------------------------
 HRESULT CALLBACK OnD3D11ResizedSwapChain( ID3D11Device* pd3dDevice, IDXGISwapChain* pSwapChain,
-	const DXGI_SURFACE_DESC* pBackBufferSurfaceDesc, void* pUserContext )
+										 const DXGI_SURFACE_DESC* pBackBufferSurfaceDesc, void* pUserContext )
 {
 	HRESULT hr = S_OK;
 
@@ -761,8 +761,8 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 {
 	if(GlobalAppState::getInstance().s_bApplicationEnabled) {
 		g_SceneRepSDFLocal.SetEnableGarbageCollect(GlobalAppState::getInstance().s_bEnableGarbageCollection);
-	
-	
+
+
 		if (GlobalAppState::getInstance().s_bRenderModeChanged) {
 			TimingLog::resetTimings();
 			GlobalAppState::getInstance().s_bRenderModeChanged = false;
@@ -771,8 +771,8 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 		// If the settings dialog is being shown, then render it instead of rendering the app's scene
 		/*if( g_D3DSettingsDlg.IsActive() )
 		{
-			g_D3DSettingsDlg.OnRender( fElapsedTime );
-			return;
+		g_D3DSettingsDlg.OnRender( fElapsedTime );
+		return;
 		}*/
 
 		g_Sensor.setFiterDepthValues(GlobalAppState::getInstance().s_bFilterKinectInputData, 2.5f, 0.03f);
@@ -863,7 +863,7 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 				//	GlobalAppState::getInstance().WaitForGPU();
 				//	g_timer.start();
 				//}
-		
+
 				//// Wait for query
 				////if(GlobalAppState::getInstance().s_timingsEnabled)
 				//{
@@ -937,7 +937,7 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 			if (GlobalAppState::getInstance().s_RenderMode == RENDERMODE_INTEGRATE && GlobalAppState::getInstance().s_bRegistrationEnabled && hr0 == S_OK)
 			{
 				mat4f transformation; transformation.setIdentity();
-		
+
 				if (g_SceneRepSDFLocal.GetNumIntegratedImages() > 0)
 				{
 					if (GlobalAppState::getInstance().s_timingsStepsEnabled) {
@@ -967,7 +967,7 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 							GlobalCameraTrackingState::getInstance().s_residualEarlyOut,
 							NULL //&g_ICPErrorLog with an error log, it will be much slower since all steps are executed twice)
 							);
-		 			}
+					}
 					if (GlobalAppState::getInstance().s_timingsStepsEnabled) {
 						GlobalAppState::getInstance().WaitForGPU();
 						GlobalAppState::getInstance().s_Timer.stop();
@@ -982,7 +982,7 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 						while(1);
 
 						transformation = g_SceneRepSDFLocal.GetLastRigidTransform();
-					
+
 						g_SceneRepSDFLocal.Reset(DXUTGetD3D11DeviceContext());
 						g_SceneRepSDFGlobal.Reset(DXUTGetD3D11DeviceContext());
 						g_SceneRepChunkGrid.Reset(DXUTGetD3D11DeviceContext());
@@ -1018,7 +1018,7 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 					TimingLog::countRemoveAndIntegrate++;
 					TimingLog::totalTimeRemoveAndIntegrate += GlobalAppState::getInstance().s_Timer.getElapsedTimeMS();
 				}
-						
+
 				vec4f posWorld = transformation*GlobalAppState::getInstance().s_StreamingPos; // trans laggs one frame *trans
 				vec3f p(posWorld.x, posWorld.y, posWorld.z);
 				//g_SceneRepChunkGrid.setPositionAndRadius(p, GlobalAppState::getInstance().s_StreamingRadius, true);
@@ -1026,16 +1026,16 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 				//unsigned int nStreamedBlocks;
 				//g_SceneRepChunkGrid.StreamOutToCPU(DXUTGetD3D11DeviceContext(), g_SceneRepSDFLocal, p, GlobalAppState::getInstance().s_StreamingRadius, true, nStreamedBlocks);
 				//g_SceneRepChunkGrid.StreamInToGPU(DXUTGetD3D11DeviceContext(), g_SceneRepSDFLocal, p, GlobalAppState::getInstance().s_StreamingRadius, true, nStreamedBlocks);
-				
+
 				if (GlobalAppState::getInstance().s_timingsStepsEnabled) {
 					GlobalAppState::getInstance().WaitForGPU();
 					GlobalAppState::getInstance().s_Timer.start();
 				}
-				
+
 				g_SceneRepChunkGrid.StreamOutToCPUPass0GPU(DXUTGetD3D11DeviceContext(), g_SceneRepSDFLocal, p, GlobalAppState::getInstance().s_StreamingRadius, true, true);
 				g_SceneRepChunkGrid.StreamInToGPUPass1GPU(DXUTGetD3D11DeviceContext(), g_SceneRepSDFLocal, true);
-				
-				
+
+
 				if (GlobalAppState::getInstance().s_timingsStepsEnabled) {
 					GlobalAppState::getInstance().WaitForGPU();
 					GlobalAppState::getInstance().s_Timer.stop();
@@ -1044,7 +1044,7 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 				}
 
 				//V_RETURN(StreamInToGPUPass1GPU(DXUTGetD3D11DeviceContext(), g_SceneRepSDFLocal, nStreamedBlocks, true));
-			
+
 				if(!GlobalAppState::getInstance().s_bDisableIntegration)
 				{
 					if (GlobalAppState::getInstance().s_timingsStepsEnabled) {
@@ -1093,29 +1093,29 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 			// Uniform Voxel Grid
 			/*mat4f trans = DX11VoxelGridOperations::GetLastRigidTransform();
 			if (GlobalAppState::getInstance().s_RenderMode == RENDERMODE_VIEW) {
-				D3DXMATRIX view = *g_Camera.GetViewMatrix();
-				D3DXMatrixInverse(&view, NULL, &view);
-				D3DXMatrixTranspose(&view, &view);
-				trans = *(mat4f*)&view;
+			D3DXMATRIX view = *g_Camera.GetViewMatrix();
+			D3DXMatrixInverse(&view, NULL, &view);
+			D3DXMatrixTranspose(&view, &view);
+			trans = *(mat4f*)&view;
 			}
 
 			DX11RayCasting::render(pd3dImmediateContext, DX11VoxelGrid::getBufferDataSRV(), DX11VoxelGrid::getPosition(), DX11VoxelGrid::getGridDimensions(), DX11VoxelGrid::getVoxelExtends(), &trans, DXUTGetWindowWidth(), DXUTGetWindowHeight());
 			DX11PhongLighting::render(pd3dImmediateContext, DX11RayCasting::getPositonsImageSRV(), DX11RayCasting::getNormalsImageSRV(), DX11RayCasting::getColorsImageSRV(), false);
 
 			if (GlobalAppState::getInstance().s_RenderMode == RENDERMODE_INTEGRATE && (g_registrationEnabled  || g_SceneRepLocal.GetNumIntegratedImages() <= 100) && hr0 == S_OK) {
-				mat4f transformation; transformation.setIdentity();
-		
-				if (DX11VoxelGridOperations::GetNumIntegratedImages() == 0)
-				{
-					DX11VoxelGridOperations::reset(pd3dImmediateContext, DX11VoxelGrid::getBufferDataUAV(), DX11VoxelGrid::getPosition(), DX11VoxelGrid::getGridDimensions(), DX11VoxelGrid::getVoxelExtends());
-				}
+			mat4f transformation; transformation.setIdentity();
 
-				if (DX11VoxelGridOperations::GetNumIntegratedImages() > 0)
-				{
-					transformation = DX11CameraTrackingMultiRes::applyCT(pd3dImmediateContext, g_KinectSensor.GetDepthFloat4SRV(), g_KinectSensor.GetNormalFloat4SRV(), g_KinectSensor.GetColorSRV(), DX11RayCasting::getPositonsImageSRV(), DX11RayCasting::getNormalsImageSRV(), DX11RayCasting::getColorsImageSRV(), DX11VoxelGridOperations::GetLastRigidTransform(), GlobalCameraTrackingState::s_maxInnerIter, GlobalCameraTrackingState::s_maxOuterIter, GlobalCameraTrackingState::s_distThres, GlobalCameraTrackingState::s_normalThres, 100.0f, 3.0f);
-				}
-			
-				DX11VoxelGridOperations::integrateDepthFrame(pd3dImmediateContext, DX11VoxelGrid::getBufferDataUAV(), DX11VoxelGrid::getPosition(), DX11VoxelGrid::getGridDimensions(), DX11VoxelGrid::getVoxelExtends(), g_KinectSensor.GetDepthFErodedSRV(), g_KinectSensor.GetColorSRV(), &transformation, DXUTGetWindowWidth(), DXUTGetWindowHeight());
+			if (DX11VoxelGridOperations::GetNumIntegratedImages() == 0)
+			{
+			DX11VoxelGridOperations::reset(pd3dImmediateContext, DX11VoxelGrid::getBufferDataUAV(), DX11VoxelGrid::getPosition(), DX11VoxelGrid::getGridDimensions(), DX11VoxelGrid::getVoxelExtends());
+			}
+
+			if (DX11VoxelGridOperations::GetNumIntegratedImages() > 0)
+			{
+			transformation = DX11CameraTrackingMultiRes::applyCT(pd3dImmediateContext, g_KinectSensor.GetDepthFloat4SRV(), g_KinectSensor.GetNormalFloat4SRV(), g_KinectSensor.GetColorSRV(), DX11RayCasting::getPositonsImageSRV(), DX11RayCasting::getNormalsImageSRV(), DX11RayCasting::getColorsImageSRV(), DX11VoxelGridOperations::GetLastRigidTransform(), GlobalCameraTrackingState::s_maxInnerIter, GlobalCameraTrackingState::s_maxOuterIter, GlobalCameraTrackingState::s_distThres, GlobalCameraTrackingState::s_normalThres, 100.0f, 3.0f);
+			}
+
+			DX11VoxelGridOperations::integrateDepthFrame(pd3dImmediateContext, DX11VoxelGrid::getBufferDataUAV(), DX11VoxelGrid::getPosition(), DX11VoxelGrid::getGridDimensions(), DX11VoxelGrid::getVoxelExtends(), g_KinectSensor.GetDepthFErodedSRV(), g_KinectSensor.GetColorSRV(), &transformation, DXUTGetWindowWidth(), DXUTGetWindowHeight());
 			}*/
 
 		}
@@ -1135,8 +1135,8 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 			DX11QuadDrawer::RenderQuad(pd3dImmediateContext, g_Sensor.GetColorSRV());
 		}else if (GlobalAppState::getInstance().s_DisplayTexture == GlobalAppState::POINT_TEXTURE)
 		{
-      std::cout<<"ready to draw points" <<std::endl;
-      //DX11QuadDrawer::RenderQuad(pd3dImmediateContext, )
+			std::cout<<"ready to draw points" <<std::endl;
+			//DX11QuadDrawer::RenderQuad(pd3dImmediateContext, )
 		}
 
 		if (GlobalAppState::getInstance().s_timingsTotalEnabled) {
@@ -1171,7 +1171,7 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 	}
 
 	TimingLog::printTimings();
-		
+
 	if (true)
 	{	
 		DXUT_BeginPerfEvent( DXUT_PERFEVENTCOLOR, L"HUD / Stats" );
@@ -1180,5 +1180,5 @@ void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext*
 		RenderText();
 		DXUT_EndPerfEvent();
 	}
-  
+
 }

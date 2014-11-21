@@ -874,6 +874,37 @@ double GlobalFun::computeMeshLineIntersectPoint(const CMesh *target, const Point
   return sqrt(min_dist);
 }
 
+void GlobalFun::computePointsOnPlane(const CMesh * const target, char axis, float axis_pos, vector<CVertex> &result)
+{
+  if(target == NULL || target->vert.size() == 0)
+    return;
+
+  if(axis == 'X'){
+    for (size_t i = 0; i < target->vert.size(); ++i){
+      const CVertex v = target->vert[i];
+      if (abs(v.P()[0] - axis_pos) < 0.004 / 2.0f){
+        result.push_back(v);
+      }
+    }
+  }else if(axis == 'Y'){
+    for (size_t i = 0; i < target->vert.size(); ++i){
+     const CVertex v = target->vert[i];
+      if (abs(v.P()[1] - axis_pos) < 0.004 / 2.0f){
+        result.push_back(v);
+      }
+    }
+  }else if(axis == 'Z'){
+    for (size_t i = 0; i < target->vert.size(); ++i){
+      const CVertex v = target->vert[i];
+      if (abs(v.P()[2] - axis_pos) < 0.004 / 2.0f){
+        result.push_back(v);
+      }
+    }
+  }
+
+  return;
+}
+
 bool GlobalFun::cmp(DesityAndIndex &a, DesityAndIndex &b)
 {
   if (a.density == b.density)

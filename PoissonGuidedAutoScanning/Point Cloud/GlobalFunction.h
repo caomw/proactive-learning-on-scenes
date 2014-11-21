@@ -79,6 +79,11 @@ namespace GlobalFun
   double computeTriangleArea_3(Point3f& v0, Point3f& v1, Point3f& v2);
   bool isPointInTriangle_3(Point3f& v0, Point3f& v1, Point3f& v2, Point3f& p);
   double computeMeshLineIntersectPoint(const CMesh *target, const Point3f& p, const Point3f& line_dir, Point3f& result, Point3f& result_normal, bool& is_barely_visible);
+  //axis plane
+  //x     yz
+  //y     xz
+  //z     xy
+  void computePointsOnPlane(const CMesh * const target, char axis, float axis_pos, vector<CVertex> &result);
   Point3f scalar2color(double scalar);
   void normalizeConfidence(vector<CVertex>& vertexes, float delta);
 
@@ -158,10 +163,7 @@ private:
 class Slice
 {
 public:
-  Slice()
-  {
-    res = 0;
-  }
+  Slice() : res(0){}
 
   //void build_slice(Point3f min, Point3f max, float cell_size);
   //void build_slice(Point3f a, Point3f b, Point3f c, float cell_length);
